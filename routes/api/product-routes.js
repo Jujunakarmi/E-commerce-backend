@@ -4,11 +4,22 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
   try{
-    const productData= Product.findAll()
+    const productData = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          attributes: ['id', 'category_name']
+        },
+         {
+        model: Tag,
+        attributes: ['id', 'tag_name']
+      }
+    ]
+    })
   res.status(200).json(productData)
 }catch(err){
   res.status(500).json(err);
@@ -16,9 +27,27 @@ router.get('/', (req, res) => {
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get('/:id', async(req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
+ 
+try{
+  const productData = await Product.findByPk(req.params.id, {
+    include: [
+      {
+        model: Category,
+        attributes: ['id', 'category_name']
+      },
+       {
+      model: Tag,
+      attributes: ['id', 'tag_name']
+    }
+  ]
+  })
+res.status(200).json(productData)
+}catch(err){
+res.status(500).json(err);
+}
 });
 
 // create new product
@@ -31,10 +60,31 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-  Product.create(req.body)
+
+    // let tags = [1,2,3,4]
+    // let outArray = []
+    // for(let i=0;i<tags.length;i++){
+    //   let obj = {
+    //     product_id: 1, tag_id:tags[i]
+    //   }
+    //   outArray.push(obj)
+    // }
+    // console.log(outArray);
+    // Map Funciton
+    // Does the same functionality as the for loop
+    // Additionally it returns back a new array of the new output
+  Product.create({
+    product_name: req.body.product_name,
+    price: req.body.price,
+    stock: req.body.stock,
+    category_id: req.body.category_id,
+    tagIds: req.body.tag_id
+  })
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
+        // ["Data","Data","Data","Data"]
+        // [{product_id: 1, tag_id:1},{product_id: 1, tag_id:2},{product_id: 1, tag_id:3},{product_id: 1, tag_id:4}]
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
             product_id: product.id,
