@@ -8,26 +8,23 @@ const ProductTag = require('./ProductTag');
 Product.belongsTo(Category, {
   foreignKey: 'category_id',
 });
-
 // Categories have many Products
 Category.hasMany(Product, {
   foreignKey: 'category_id',
   onDelete: 'SET NULL',
 });
 
-
-// Products belongToMany Tags (through ProductTag)
-Product.belongsToMany (Tag,{
-through: ProductTag,
-foreignKey: 'product_id'
-})
-
-
-// Tags belongToMany Products (through ProductTag)
-
-Tag.belongsToMany(Product,{
+// Products belongToMany Tags (through ProductTag) https://sequelize.org/master/class/lib/associations/belongs-to-many.js~BelongsToMany.html
+Product.belongsToMany(Tag, {
   through: ProductTag,
-  foreignKey:'tag_id'
+  //  modelName: 'product_tag',
+  foreignKey: 'product_id'
+})
+// Tags belongToMany Products (through ProductTag)
+Tag.belongsToMany(Product, {
+  through: ProductTag,
+  //  modelName: 'product_tag',
+  foreignKey: 'tag_id'
 })
 
 module.exports = {
