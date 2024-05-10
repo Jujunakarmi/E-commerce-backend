@@ -11,20 +11,22 @@ Product.belongsTo(Category, {
 // Categories have many Products
 Category.hasMany(Product, {
   foreignKey: 'category_id',
-  onDelete: 'SET NULL',
+  onDelete: 'CASCADE',
 });
 
 // Products belongToMany Tags (through ProductTag) https://sequelize.org/master/class/lib/associations/belongs-to-many.js~BelongsToMany.html
 Product.belongsToMany(Tag, {
   through: ProductTag,
   //  modelName: 'product_tag',
-  foreignKey: 'product_id'
+  foreignKey: 'product_id',
+  
 })
 // Tags belongToMany Products (through ProductTag)
 Tag.belongsToMany(Product, {
   through: ProductTag,
   //  modelName: 'product_tag',
-  foreignKey: 'tag_id'
+  foreignKey: 'tag_id',
+  
 })
 
 module.exports = {
