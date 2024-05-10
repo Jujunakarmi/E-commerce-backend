@@ -8,7 +8,7 @@
 This application creates the backend of a e-comerce website by useing Express.js API and Sequelize to interact with a MySQL database.
 
 Here is the link to demo video walkthrough:
-[Click on this link]()
+[Click on this link](https://drive.google.com/file/d/1x0zo0c1oQCru_0J_CbmLs4jZzfxuBa8C/view?usp=sharing)
 
 
 

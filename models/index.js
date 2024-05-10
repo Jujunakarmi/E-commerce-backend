@@ -11,7 +11,7 @@ Product.belongsTo(Category, {
 // Categories have many Products
 Category.hasMany(Product, {
   foreignKey: 'category_id',
-  onDelete: 'CASCADE',
+  onDelete: 'NULL',
 });
 
 // Products belongToMany Tags (through ProductTag) https://sequelize.org/master/class/lib/associations/belongs-to-many.js~BelongsToMany.html
